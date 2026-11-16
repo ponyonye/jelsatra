@@ -1,0 +1,76 @@
+{
+  "team": [
+    {
+      "name": "Raihan Garuts",
+      "role": "Ketua / Product Manager"
+    },
+    {
+      "name": "Raihan Bekasi",
+      "role": "Programmer / Software Engineer"
+    },
+    {
+      "name": "Guna",
+      "role": "3D Modeler & Content Assets"
+    },
+    {
+      "name": "Novali",
+      "role": "UI/UX Designer"
+    },
+    {
+      "name": "Hapis",
+      "role": "Quality Assurance (QA)"
+    }
+  ],
+  "dataSources": [
+    {
+      "name": "Bappenas",
+      "description": "Kementerian PPN / Badan Perencanaan Pembangunan Nasional Republik Indonesia"
+    },
+    {
+      "name": "Balai Besar KSDA Sulawesi Selatan",
+      "description": "Konservasi Sumber Daya Alam wilayah Sulawesi"
+    },
+    {
+      "name": "Permen LHK P.106 Tahun 2018",
+      "description": "Peraturan Menteri Lingkungan Hidup dan Kehutanan tentang Jenis Tumbuhan dan Satwa yang Dilindungi"
+    },
+    {
+      "name": "KLHK",
+      "description": "Kementerian Lingkungan Hidup dan Kehutanan Republik Indonesia"
+    },
+    {
+      "name": "Direktorat Jenderal KSDAE",
+      "description": "Direktorat Jenderal Konservasi Sumber Daya Alam dan Ekosistem"
+    },
+    {
+      "name": "IUCN Red List of Threatened Species",
+      "description": "Katalog global status risiko kepunahan keanekaragaman hayati dunia"
+    }
+  ],
+  "assetCredits": [
+    {
+      "item": "Model 3D Format GLB/glTF",
+      "creator": "Guna (Assets) & Open Creative Commons Creators",
+      "source": "Sketchfab / Poly Pizza (CC-BY 4.0 / CC0)",
+      "license": "Creative Commons Attribution"
+    },
+    {
+      "item": "Tipografi Antarmuka (Plus Jakarta Sans)",
+      "creator": "Tokotype",
+      "source": "Google Fonts",
+      "license": "SIL Open Font License 1.1"
+    },
+    {
+      "item": "Ikon Navigasi dan Antarmuka",
+      "creator": "Lucide Community",
+      "source": "Lucide React",
+      "license": "ISC License"
+    },
+    {
+      "item": "Pustaka Penampil 3D & Augmented Reality",
+      "creator": "Google",
+      "source": "@google/model-viewer (WebXR, Scene Viewer, Quick Look)",
+      "license": "Apache License 2.0"
+    }
+  ]
+}

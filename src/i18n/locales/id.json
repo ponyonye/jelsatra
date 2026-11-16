@@ -1,0 +1,52 @@
+{
+  "app": {
+    "title": "JELAJAH SATWA NUSANTARA",
+    "tagline": "KENALI YANG LIAR, LINDUNGI YANG LANGKA.",
+    "footerHint": "Tap Satwa untuk Info dan AR!",
+    "creditsButton": "Kredit"
+  },
+  "gallery": {
+    "viewInfo": "Lihat Info",
+    "badge3d": "3D AR",
+    "loading": "Memuat galeri satwa...",
+    "searchPlaceholder": "Cari satwa langka..."
+  },
+  "detail": {
+    "back": "Kembali",
+    "header": "DETAIL SATWA",
+    "habitatTitle": "Habitat dan wilayah persebaran",
+    "dietTitle": "Makanan",
+    "funFactsTitle": "Fakta unik",
+    "sourcesTitle": "Sumber Informasi",
+    "viewAr": "Lihat dalam AR (3D)",
+    "nationalPriority": "Prioritas konservasi nasional",
+    "protected": "Satwa dilindungi"
+  },
+  "ar": {
+    "header": "SATWA (AR)",
+    "back": "Kembali",
+    "dragHint": "Geser satu jari untuk memutar",
+    "pinchHint": "Cubit untuk memperbesar",
+    "resetPosition": "Reset Posisi",
+    "animalSound": "Suara Satwa",
+    "viewInSpace": "Lihat di Ruangan Anda (AR)",
+    "loadingModel": "Sedang mengunduh model 3D...",
+    "errorTitle": "Model 3D Belum Tersedia",
+    "errorDesc": "Aset model 3D sedang dalam proses optimasi oleh tim Assets. Tampilan alternatif 3D/placeholder tetap dapat dieksplorasi.",
+    "arNotSupported": "Perangkat atau browser ini belum mendukung WebXR / Scene Viewer. Anda dapat tetap melihat dan memutar model 3D di layar."
+  },
+  "credits": {
+    "back": "Kembali",
+    "header": "KREDIT",
+    "teamTitle": "Tim Pengembang",
+    "sourcesTitle": "Sumber Data",
+    "assetsTitle": "Kredit Aset & Teknologi"
+  },
+  "conservation": {
+    "CR": "Critically Endangered (Kritis)",
+    "EN": "Endangered (Terancam)",
+    "VU": "Vulnerable (Rentan)",
+    "NT": "Near Threatened (Hampir Terancam)",
+    "LC": "Least Concern (Risiko Rendah)"
+  }
+}

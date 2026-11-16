@@ -1,0 +1,52 @@
+{
+  "app": {
+    "title": "EXPLORE INDONESIAN WILDLIFE",
+    "tagline": "KNOW THE WILD, PROTECT THE RARE.",
+    "footerHint": "Tap Animal for Info & AR!",
+    "creditsButton": "Credits"
+  },
+  "gallery": {
+    "viewInfo": "View Info",
+    "badge3d": "3D AR",
+    "loading": "Loading animal gallery...",
+    "searchPlaceholder": "Search wildlife..."
+  },
+  "detail": {
+    "back": "Back",
+    "header": "ANIMAL DETAILS",
+    "habitatTitle": "Habitat & Distribution",
+    "dietTitle": "Diet",
+    "funFactsTitle": "Fun Facts",
+    "sourcesTitle": "Information Sources",
+    "viewAr": "View in AR (3D)",
+    "nationalPriority": "National Conservation Priority",
+    "protected": "Protected Species"
+  },
+  "ar": {
+    "header": "WILDLIFE (AR)",
+    "back": "Back",
+    "dragHint": "Drag with one finger to rotate",
+    "pinchHint": "Pinch to zoom",
+    "resetPosition": "Reset Position",
+    "animalSound": "Animal Sound",
+    "viewInSpace": "View in your room (AR)",
+    "loadingModel": "Downloading 3D model...",
+    "errorTitle": "3D Model Unavailable",
+    "errorDesc": "The 3D asset is being optimized by the Assets team. You can still inspect the 3D placeholder on your screen.",
+    "arNotSupported": "Your device or browser does not support WebXR / Scene Viewer. You can still inspect and rotate the 3D model on screen."
+  },
+  "credits": {
+    "back": "Back",
+    "header": "CREDITS",
+    "teamTitle": "Development Team",
+    "sourcesTitle": "Data Sources",
+    "assetsTitle": "Assets & Technology Credits"
+  },
+  "conservation": {
+    "CR": "Critically Endangered",
+    "EN": "Endangered",
+    "VU": "Vulnerable",
+    "NT": "Near Threatened",
+    "LC": "Least Concern"
+  }
+}

@@ -1,0 +1,28 @@
+# Global headers
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# 3D Model MIME types & CORS for WebAR
+/*.glb
+  Content-Type: model/gltf-binary
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.gltf
+  Content-Type: model/gltf+json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.usdz
+  Content-Type: model/vnd.usdz+zip
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static assets caching
+/images/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/audio/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400

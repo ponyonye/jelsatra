@@ -1,0 +1,194 @@
+[
+  {
+    "id": "komodo",
+    "slug": "komodo",
+    "commonName": "Komodo",
+    "scientificName": "Varanus komodoensis",
+    "thumbnail": "/images/animals/komodo.png",
+    "heroImage": "/images/animals/komodo.png",
+    "modelGlb": "/models/komodo.glb",
+    "habitat": "Sabana, padang rumput, dan hutan tropis kering",
+    "distribution": "Pulau Komodo, Rinca, Gili Motang, Gili Dasami, dan sebagian wilayah Flores, Nusa Tenggara Timur",
+    "diet": "Rusa, babi hutan, kerbau, monyet, tikus, dan berbagai hewan lainnya. Komodo juga memakan bangkai.",
+    "funFacts": [
+      "Komodo merupakan kadal terbesar yang masih hidup di dunia.",
+      "Hewan ini memiliki lidah bercabang untuk mendeteksi bau partikel di udara.",
+      "Mampu berkembang biak tanpa pejantan melalui proses reproduksi yang disebut partenogenesis."
+    ],
+    "conservationStatus": "EN",
+    "conservationLabel": "Endangered (Terancam)",
+    "protectionStatus": "Satwa dilindungi",
+    "nationalPriority": true,
+    "sources": [
+      "IUCN Red List of Threatened Species",
+      "Kementerian Lingkungan Hidup dan Kehutanan RI",
+      "Balai Taman Nasional Komodo"
+    ],
+    "modelCredits": {
+      "creator": "Assets Team (Guna) / CC-BY 3D Source",
+      "title": "Komodo Dragon Low-Poly 3D Model",
+      "source": "Sketchfab / Open 3D Repository",
+      "license": "CC-BY 4.0"
+    }
+  },
+  {
+    "id": "orangutan-kalimantan",
+    "slug": "orangutan-kalimantan",
+    "commonName": "Orangutan Kalimantan",
+    "scientificName": "Pongo pygmaeus",
+    "thumbnail": "/images/animals/orangutan.png",
+    "heroImage": "/images/animals/orangutan.png",
+    "modelGlb": "/models/orangutan.glb",
+    "habitat": "Hutan hujan tropis, hutan rawa gambut, dan hutan dataran rendah",
+    "distribution": "Pulau Kalimantan, meliputi Kalimantan Indonesia serta Sabah dan Sarawak di Malaysia",
+    "diet": "Buah-buahan, daun, kulit kayu, bunga, serangga, dan tumbuhan lainnya.",
+    "funFacts": [
+      "Orangutan lebih banyak menghabiskan waktunya di atas pohon (arboreal) dan membuat sarang baru dari ranting serta daun setiap hari.",
+      "Memiliki rentang lengan hingga 2 meter, lebih panjang dari tinggi badannya.",
+      "Berperan vital sebagai penyebar biji pohon hutan untuk menjaga regenerasi kanopi hutan hujan."
+    ],
+    "conservationStatus": "CR",
+    "conservationLabel": "Critically Endangered (Kritis)",
+    "protectionStatus": "Satwa dilindungi",
+    "nationalPriority": true,
+    "sources": [
+      "IUCN Red List of Threatened Species",
+      "Kementerian Lingkungan Hidup dan Kehutanan RI",
+      "BKSDA Kalimantan Barat"
+    ],
+    "modelCredits": {
+      "creator": "Assets Team (Guna) / CC-BY 3D Source",
+      "title": "Bornean Orangutan 3D Model",
+      "source": "Sketchfab / Open 3D Repository",
+      "license": "CC-BY 4.0"
+    }
+  },
+  {
+    "id": "harimau-sumatra",
+    "slug": "harimau-sumatra",
+    "commonName": "Harimau Sumatra",
+    "scientificName": "Panthera tigris sumatrae",
+    "thumbnail": "/images/animals/harimau.png",
+    "heroImage": "/images/animals/harimau.png",
+    "modelGlb": "/models/harimau-sumatra.glb",
+    "habitat": "Hutan hujan tropis, hutan dataran rendah, hutan rawa gambut, dan hutan pegunungan",
+    "distribution": "Pulau Sumatra, Indonesia",
+    "diet": "Rusa, babi hutan, kijang, dan berbagai mamalia lain yang tersedia di habitatnya.",
+    "funFacts": [
+      "Harimau Sumatra merupakan satu-satunya subspesies harimau yang masih hidup secara alami di Indonesia setelah harimau Jawa dan Bali punah.",
+      "Ukuran tubuhnya relatif paling kecil dibanding subspesies harimau lainnya, memudahkan manuver berburu di hutan hujan yang rapat.",
+      "Memiliki selaput di antara jari-jari kakinya yang membuatnya menjadi perenang yang sangat tangguh."
+    ],
+    "conservationStatus": "CR",
+    "conservationLabel": "Critically Endangered (Kritis)",
+    "protectionStatus": "Satwa dilindungi",
+    "nationalPriority": true,
+    "sources": [
+      "IUCN Red List of Threatened Species",
+      "Kementerian Lingkungan Hidup dan Kehutanan RI",
+      "Forum Konservasi HarimauKita"
+    ],
+    "modelCredits": {
+      "creator": "Assets Team (Guna) / CC-BY 3D Source",
+      "title": "Sumatran Tiger 3D Model",
+      "source": "Sketchfab / Open 3D Repository",
+      "license": "CC-BY 4.0"
+    }
+  },
+  {
+    "id": "badak-jawa",
+    "slug": "badak-jawa",
+    "commonName": "Badak Jawa",
+    "scientificName": "Rhinoceros sondaicus",
+    "thumbnail": "/images/animals/badak.png",
+    "heroImage": "/images/animals/badak.png",
+    "modelGlb": "/models/badak-jawa.glb",
+    "habitat": "Hutan hujan tropis dataran rendah, terutama hutan lebat yang memiliki sumber air dan tumbuhan pakan",
+    "distribution": "Saat ini hanya ditemukan di Semenanjung Ujung Kulon, Banten, Indonesia",
+    "diet": "Daun muda, tunas, ranting, buah-buahan, dan berbagai tumbuhan hutan.",
+    "funFacts": [
+      "Badak Jawa hanya memiliki satu cula (monoceros) sepanjang 20–25 cm, berbeda dengan Badak Sumatra yang memiliki dua cula.",
+      "Merupakan salah satu mamalia darat paling terancam punah di muka bumi dengan populasi kurang dari 80 individu.",
+      "Gemar berkubang di lumpur untuk menjaga suhu tubuh tetap sejuk dan melindungi lapisan kulit dari sengatan parasit."
+    ],
+    "conservationStatus": "CR",
+    "conservationLabel": "Critically Endangered (Kritis)",
+    "protectionStatus": "Satwa dilindungi",
+    "nationalPriority": true,
+    "sources": [
+      "IUCN Red List of Threatened Species",
+      "Balai Taman Nasional Ujung Kulon",
+      "Yayasan Badak Indonesia (YABI)"
+    ],
+    "modelCredits": {
+      "creator": "Assets Team (Guna) / CC-BY 3D Source",
+      "title": "Javan Rhinoceros 3D Model",
+      "source": "Sketchfab / Open 3D Repository",
+      "license": "CC-BY 4.0"
+    }
+  },
+  {
+    "id": "jalak-bali",
+    "slug": "jalak-bali",
+    "commonName": "Jalak Bali (Curik Bali)",
+    "scientificName": "Leucopsar rothschildi",
+    "thumbnail": "/images/animals/jalak-bali.png",
+    "heroImage": "/images/animals/jalak-bali.png",
+    "modelGlb": "/models/jalak-bali.glb",
+    "habitat": "Hutan musim, hutan pantai, hutan mangrove, dan sabana kering",
+    "distribution": "Bagian barat Pulau Bali, terutama kawasan Taman Nasional Bali Barat",
+    "diet": "Serangga, ulat, semut, rayap, buah-buahan hutan, dan biji-bijian.",
+    "funFacts": [
+      "Hampir seluruh tubuhnya tertutup bulu putih salju yang anggun dengan jambul megah di kepala serta ujung sayap dan ekor berwarna hitam.",
+      "Area di sekeliling matanya memiliki kulit telanjang berwarna biru terang yang sangat memikat.",
+      "Spesies endemik Pulau Bali dan dinobatkan sebagai lambang fauna resmi Provinsi Bali sejak tahun 1991."
+    ],
+    "conservationStatus": "CR",
+    "conservationLabel": "Critically Endangered (Kritis)",
+    "protectionStatus": "Satwa dilindungi",
+    "nationalPriority": true,
+    "sources": [
+      "IUCN Red List of Threatened Species",
+      "Balai Taman Nasional Bali Barat",
+      "KLHK Direktorat Jenderal KSDAE"
+    ],
+    "modelCredits": {
+      "creator": "Assets Team (Guna) / CC-BY 3D Source",
+      "title": "Bali Myna 3D Model",
+      "source": "Sketchfab / Open 3D Repository",
+      "license": "CC-BY 4.0"
+    }
+  },
+  {
+    "id": "anoa-dataran-rendah",
+    "slug": "anoa-dataran-rendah",
+    "commonName": "Anoa Dataran Rendah",
+    "scientificName": "Bubalus depressicornis",
+    "thumbnail": "/images/animals/anoa.png",
+    "heroImage": "/images/animals/anoa.png",
+    "modelGlb": "/models/anoa.glb",
+    "habitat": "Hutan primer dataran rendah, hutan tropis, dan kawasan hutan yang memiliki sumber mata air",
+    "distribution": "Pulau Sulawesi dan Pulau Buton, Indonesia",
+    "diet": "Daun-daunan, tumbuhan bawah, liana, rumput, rebung bambu, dan buah-buahan yang jatuh di lantai hutan.",
+    "funFacts": [
+      "Merupakan spesies kerbau liar terkecil di dunia dengan tinggi bahu hanya sekitar 70–100 cm.",
+      "Hewan soliter yang lebih sering berkelana sendirian di dalam lebatnya hutan tropis Sulawesi.",
+      "Memiliki tanduk lurus meruncing ke arah belakang yang berfungsi untuk pertahanan diri."
+    ],
+    "conservationStatus": "EN",
+    "conservationLabel": "Endangered (Terancam)",
+    "protectionStatus": "Satwa dilindungi",
+    "nationalPriority": true,
+    "sources": [
+      "IUCN Red List of Threatened Species",
+      "Balai Besar KSDA Sulawesi Selatan",
+      "Direktorat Jenderal KSDAE KLHK"
+    ],
+    "modelCredits": {
+      "creator": "Assets Team (Guna) / CC-BY 3D Source",
+      "title": "Lowland Anoa 3D Model",
+      "source": "Sketchfab / Open 3D Repository",
+      "license": "CC-BY 4.0"
+    }
+  }
+]
