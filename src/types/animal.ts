@@ -22,6 +22,8 @@ export interface Animal {
   heroImage: string;
   modelGlb: string;
   modelUsdz?: string;
+  modelOrientation?: string;
+  initialCameraOrbit?: string;
   habitat: string;
   distribution: string;
   diet: string;
@@ -58,3 +60,4 @@ export interface CreditsData {
   dataSources: DataSource[];
   assetCredits: AssetCredit[];
 }
+

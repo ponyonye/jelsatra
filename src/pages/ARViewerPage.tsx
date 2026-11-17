@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Move, ZoomIn, RotateCcw, Volume2, Sparkles } from 'lucide-react';
+import { ArrowLeft, Move, ZoomIn, RotateCcw, Volume2, Sparkles, Info } from 'lucide-react';
 import animalsData from '@/data/animals.json';
 import { Animal } from '@/types/animal';
 import ModelViewer from '@/ar/ModelViewer';
@@ -9,17 +9,19 @@ export const ARViewerPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const viewerRef = useRef<any>(null);
+  const [isArSupported, setIsArSupported] = useState<boolean>(true);
 
   const animals: Animal[] = animalsData as Animal[];
   const animal = animals.find((a) => a.slug === slug);
 
-  // If the specific 3D model doesn't exist yet on disk, use the PoC sample or test model
-  // As per PRD: Assets team is producing the finalized models.
   const modelSource = animal?.modelGlb || '/models/poc-sample.glb';
 
   const handleResetCamera = () => {
     if (viewerRef.current) {
-      viewerRef.current.cameraOrbit = '0deg 75deg 105%';
+      viewerRef.current.cameraOrbit = animal?.initialCameraOrbit || '0deg 75deg 105%';
+      if (animal?.modelOrientation) {
+        viewerRef.current.orientation = animal.modelOrientation;
+      }
       viewerRef.current.cameraTarget = 'auto auto auto';
       viewerRef.current.fieldOfView = 'auto';
       if (typeof viewerRef.current.jumpCameraToGoal === 'function') {
@@ -34,6 +36,7 @@ export const ARViewerPage: React.FC = () => {
         viewerRef.current.activateAR();
       } catch (err) {
         console.warn('AR launch fallback:', err);
+        setIsArSupported(false);
       }
     }
   };
@@ -44,11 +47,11 @@ export const ARViewerPage: React.FC = () => {
 
   if (!animal) {
     return (
-      <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center justify-center p-6 text-center">
         <h2 className="text-lg font-bold">Satwa Tidak Ditemukan</h2>
         <button
           onClick={() => navigate('/')}
-          className="mt-4 px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold"
+          className="mt-4 px-4 py-2 rounded-xl bg-emerald-700 text-white text-xs font-semibold"
         >
           Kembali ke Galeri
         </button>
@@ -58,7 +61,7 @@ export const ARViewerPage: React.FC = () => {
 
   return (
     <div className="relative w-full h-screen bg-slate-900 text-white flex flex-col justify-between overflow-hidden select-none">
-      {/* Top Header matching Mockup 8 */}
+      {/* Top Header */}
       <header className="relative z-20 flex items-center justify-between px-4 py-3 safe-top bg-gradient-to-b from-slate-950/80 to-transparent">
         <button
           onClick={() => navigate(`/satwa/${animal.slug}`)}
@@ -68,8 +71,8 @@ export const ARViewerPage: React.FC = () => {
           <span>Kembali</span>
         </button>
 
-        <h1 className="text-sm font-bold tracking-wider uppercase text-slate-100">
-          SATWA (AR)
+        <h1 className="text-xs font-bold tracking-wider uppercase text-slate-100">
+          MODE 3D & AR
         </h1>
 
         <button
@@ -77,11 +80,21 @@ export const ARViewerPage: React.FC = () => {
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white shadow-md active:scale-95 transition"
         >
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Buka AR</span>
+          <span>Mulai AR</span>
         </button>
       </header>
 
-      {/* Gesture Hint Banner matching Mockup 8 */}
+      {/* Non-AR notice if AR unsupported */}
+      {!isArSupported && (
+        <div className="relative z-20 mx-4 mt-1">
+          <div className="p-2.5 rounded-xl bg-amber-950/80 border border-amber-600/50 text-amber-200 text-xs flex items-center gap-2">
+            <Info className="w-4 h-4 shrink-0 text-amber-400" />
+            <span>AR tidak didukung di peramban ini. Tampilan beralih ke Mode 3D.</span>
+          </div>
+        </div>
+      )}
+
+      {/* Gesture Hint Banner */}
       <div className="relative z-20 mx-auto px-4 w-full max-w-sm mt-1">
         <div className="flex items-center justify-center gap-4 py-2 px-4 rounded-full bg-slate-950/80 backdrop-blur border border-slate-800 text-xs text-slate-300 shadow-lg">
           <div className="flex items-center gap-1.5">
@@ -98,11 +111,6 @@ export const ARViewerPage: React.FC = () => {
 
       {/* 3D Model Viewer Web Component Center Area */}
       <main className="relative flex-1 w-full flex items-center justify-center">
-        {/* Subtle decorative AR target indicator */}
-        <div className="absolute w-64 h-64 rounded-full border border-dashed border-slate-700/40 pointer-events-none flex items-center justify-center opacity-30">
-          <div className="w-44 h-44 rounded-full border border-slate-700/20" />
-        </div>
-
         <ModelViewer
           modelRef={viewerRef}
           src={modelSource}
@@ -112,11 +120,19 @@ export const ARViewerPage: React.FC = () => {
           autoRotate={false}
           cameraControls={true}
           ar={true}
+          showArButton={false}
+          orientation={animal.modelOrientation}
+          cameraOrbit={animal.initialCameraOrbit}
+          onArStatusChange={(status) => {
+            if (status === 'failed') {
+              setIsArSupported(false);
+            }
+          }}
           className="w-full h-full"
         />
       </main>
 
-      {/* Bottom Controls and Info Card matching Mockup 8 */}
+      {/* Bottom Controls and Info Card */}
       <footer className="relative z-20 px-4 pb-4 safe-bottom flex flex-col gap-3 max-w-md mx-auto w-full">
         {/* Action Buttons: Reset Posisi & Suara Satwa */}
         <div className="grid grid-cols-2 gap-3">
@@ -137,7 +153,7 @@ export const ARViewerPage: React.FC = () => {
           </button>
         </div>
 
-        {/* Bottom Animal Name Card matching Mockup 8 */}
+        {/* Bottom Animal Name Card */}
         <div className="bg-white text-slate-900 rounded-2xl p-3.5 shadow-2xl text-center border border-slate-100">
           <h2 className="text-base font-extrabold tracking-tight text-slate-900">
             {animal.commonName}

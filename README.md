@@ -90,3 +90,4 @@ Badge status konservasi mengimplementasikan standar warna dan teks:
 - **Guna**: Assets (Model 3D & Konten)
 - **Novali**: UI/UX Designer
 - **Hapis**: Quality Assurance (QA)
+

@@ -23,6 +23,7 @@ declare global {
           'auto-rotate'?: boolean;
           'auto-rotate-delay'?: string | number;
           'rotation-per-second'?: string;
+          orientation?: string;
           'interaction-prompt'?: 'auto' | 'when-focused' | 'none';
           'camera-orbit'?: string;
           'field-of-view'?: string;
@@ -67,6 +68,7 @@ declare global {
           'auto-rotate'?: boolean;
           'auto-rotate-delay'?: string | number;
           'rotation-per-second'?: string;
+          orientation?: string;
           'interaction-prompt'?: 'auto' | 'when-focused' | 'none';
           'camera-orbit'?: string;
           'field-of-view'?: string;

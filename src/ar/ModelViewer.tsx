@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '@google/model-viewer';
-import { Loader2, AlertCircle, RefreshCw, Eye } from 'lucide-react';
+import { Loader2, AlertCircle, RefreshCw, Eye, Sparkles, Smartphone, Check } from 'lucide-react';
 
 interface ModelViewerProps {
   src: string;
@@ -10,7 +10,17 @@ interface ModelViewerProps {
   autoRotate?: boolean;
   cameraControls?: boolean;
   ar?: boolean;
+  showArButton?: boolean;
+  showCapabilityBadge?: boolean;
+  orientation?: string;
+  cameraOrbit?: string;
+  minCameraOrbit?: string;
+  maxCameraOrbit?: string;
+  fieldOfView?: string;
   onArStatusChange?: (status: string) => void;
+  onLoad?: () => void;
+  onError?: (error: string) => void;
+  onProgress?: (percent: number) => void;
   className?: string;
   modelRef?: React.MutableRefObject<any>;
 }
@@ -23,7 +33,17 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
   autoRotate = false,
   cameraControls = true,
   ar = true,
+  showArButton = true,
+  showCapabilityBadge = false,
+  orientation,
+  cameraOrbit,
+  minCameraOrbit,
+  maxCameraOrbit,
+  fieldOfView,
   onArStatusChange,
+  onLoad,
+  onError,
+  onProgress,
   className = '',
   modelRef: externalRef
 }) => {
@@ -34,46 +54,83 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
   const [loadProgress, setLoadProgress] = useState<number>(0);
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isArSupported, setIsArSupported] = useState<boolean>(false);
+
+  // Store latest callbacks in a ref to avoid re-subscribing useEffect when callbacks change identity
+  const callbacksRef = useRef({ onLoad, onError, onProgress, onArStatusChange });
+  useEffect(() => {
+    callbacksRef.current = { onLoad, onError, onProgress, onArStatusChange };
+  });
 
   useEffect(() => {
     const el = viewerRef.current;
     if (!el) return;
 
-    setIsLoading(true);
-    setHasError(false);
-    setLoadProgress(0);
+    const checkArSupport = () => {
+      if (el.canActivateAR) {
+        setIsArSupported(true);
+      }
+    };
 
     const handleProgress = (event: any) => {
       const progress = Math.round((event.detail?.totalProgress || 0) * 100);
       setLoadProgress(progress);
+      callbacksRef.current.onProgress?.(progress);
+
+      // If model has finished loading, dismiss loading indicator immediately
+      if (el.loaded) {
+        setIsLoading(false);
+      }
     };
 
     const handleLoad = () => {
       setIsLoading(false);
       setHasError(false);
+      setLoadProgress(100);
+      checkArSupport();
+      callbacksRef.current.onLoad?.();
     };
 
     const handleError = (event: any) => {
       setIsLoading(false);
       setHasError(true);
-      setErrorMessage(
+      const msg =
         event?.detail?.type === 'loadfailure'
-          ? 'Gagal memuat model 3D. Format tidak didukung atau berkas belum tersedia.'
-          : 'Terjadi kendala saat memuat berkas model 3D.'
-      );
+          ? 'Gagal memuat model 3D. Format berkas tidak didukung atau berkas belum tersedia.'
+          : 'Terjadi kendala saat mengunduh berkas model 3D.';
+      setErrorMessage(msg);
+      callbacksRef.current.onError?.(msg);
     };
 
     const handleArStatus = (event: any) => {
       const status = event.detail?.status;
-      if (onArStatusChange) {
-        onArStatusChange(status);
+      callbacksRef.current.onArStatusChange?.(status);
+      if (status === 'failed') {
+        setIsArSupported(false);
       }
     };
 
+    // 1. Attach listeners before checking element state to prevent missing events
     el.addEventListener('progress', handleProgress);
     el.addEventListener('load', handleLoad);
     el.addEventListener('error', handleError);
     el.addEventListener('ar-status', handleArStatus);
+
+    // 2. Immediate synchronization with model-viewer's native `loaded` property:
+    // If the model is already in browser cache or already loaded, dismiss loading immediately
+    if (el.loaded) {
+      setIsLoading(false);
+      setHasError(false);
+      setLoadProgress(100);
+      checkArSupport();
+      callbacksRef.current.onLoad?.();
+    } else {
+      setIsLoading(true);
+      setHasError(false);
+      setLoadProgress(0);
+    }
+
+    checkArSupport();
 
     return () => {
       el.removeEventListener('progress', handleProgress);
@@ -81,7 +138,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
       el.removeEventListener('error', handleError);
       el.removeEventListener('ar-status', handleArStatus);
     };
-  }, [src, viewerRef, onArStatusChange]);
+  }, [src, viewerRef]);
 
   return (
     <div className={`relative w-full h-full flex items-center justify-center overflow-hidden ${className}`}>
@@ -99,79 +156,107 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
         ar-scale="auto"
         camera-controls={cameraControls}
         auto-rotate={autoRotate}
+        orientation={orientation}
+        camera-orbit={cameraOrbit}
+        min-camera-orbit={minCameraOrbit}
+        max-camera-orbit={maxCameraOrbit}
+        field-of-view={fieldOfView}
         shadow-intensity="1.2"
         shadow-softness="0.8"
         exposure="1.0"
         touch-action="pan-y"
         style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}
       >
-        {/* Custom AR Launch button (can be slotted) */}
+        {/* Official slot="ar-button": Model Viewer manages activation and platform display */}
         <button
           slot="ar-button"
-          className="hidden"
-          id="default-ar-button"
-          aria-label="Lihat dalam AR"
+          id="native-ar-button"
+          className={
+            showArButton
+              ? "absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-700/90 hover:bg-emerald-600 text-white text-xs font-bold shadow-lg backdrop-blur active:scale-95 transition"
+              : "hidden"
+          }
+          aria-label="Lihat dalam Augmented Reality"
         >
-          AR
+          <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
+          <span>Lihat AR</span>
         </button>
 
-        {/* Loading Poster Slot */}
-        <div slot="poster" className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
+        {/* Loading Poster Slot: Automatically hidden by model-viewer once the model is rendered */}
+        <div slot="poster" className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
           {poster ? (
-            <img src={poster} alt={alt} className="w-48 h-48 object-cover rounded-2xl opacity-60 filter blur-sm" />
+            <img src={poster} alt={alt} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-24 h-24 rounded-full bg-slate-800/40 flex items-center justify-center text-slate-400">
-              <Eye className="w-10 h-10 animate-pulse" />
+            <div className="w-16 h-16 rounded-full bg-slate-800/40 flex items-center justify-center text-slate-400">
+              <Eye className="w-8 h-8 animate-pulse" />
             </div>
           )}
         </div>
       </model-viewer>
 
-      {/* Loading Progress Indicator Overlay */}
-      {isLoading && !hasError && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm pointer-events-none transition-opacity duration-300">
-          <div className="flex flex-col items-center p-6 rounded-2xl bg-slate-900/90 border border-slate-700/60 shadow-xl max-w-xs text-center text-white">
-            <Loader2 className="w-10 h-10 text-emerald-400 animate-spin mb-3" />
-            <h4 className="text-sm font-semibold tracking-wide">Memuat Model 3D</h4>
-            <p className="text-xs text-slate-300 mt-1">Mengunduh aset satwa untuk pengalaman WebAR...</p>
-            {loadProgress > 0 && (
-              <div className="w-full mt-4">
-                <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
-                  <div
-                    className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${loadProgress}%` }}
-                  />
-                </div>
-                <span className="text-[11px] text-slate-400 mt-1.5 block">{loadProgress}%</span>
-              </div>
+      {/* Optional AR Capability Indicator Badge */}
+      {showCapabilityBadge && (
+        <div className="absolute top-3 left-4 z-10 pointer-events-none">
+          <span
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold backdrop-blur shadow-sm ${
+              isArSupported
+                ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-700/60'
+                : 'bg-slate-950/80 text-slate-300 border border-slate-700/60'
+            }`}
+          >
+            {isArSupported ? (
+              <>
+                <Check className="w-3 h-3 text-emerald-400" />
+                <span>AR Siap (WebXR/Scene Viewer)</span>
+              </>
+            ) : (
+              <>
+                <Smartphone className="w-3 h-3 text-slate-400" />
+                <span>Mode 3D Interaktif</span>
+              </>
             )}
+          </span>
+        </div>
+      )}
+
+      {/*
+        Compact, Non-Intrusive Loading Indicator:
+        Appears ONLY while the model is actively downloading.
+        Positioned as a sleek badge in top-left so it NEVER dims, blurs, or covers the 3D model.
+        Instantly disappears upon model load.
+      */}
+      {isLoading && !hasError && (
+        <div className="absolute top-3 left-3 z-20 pointer-events-none transition-opacity duration-200">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-sm border border-slate-700/60 shadow-md text-white">
+            <Loader2 className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
+            <span className="text-[11px] font-medium text-slate-200">
+              Memuat 3D{loadProgress > 0 && loadProgress < 100 ? ` (${loadProgress}%)` : '...'}
+            </span>
           </div>
         </div>
       )}
 
-      {/* Error / Fallback State */}
+      {/* Error / Fallback State: Visible only when model loading fails */}
       {hasError && (
-        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-6 bg-slate-950/85 backdrop-blur-md text-center text-white">
-          <div className="p-4 rounded-full bg-red-900/40 border border-red-500/30 text-red-400 mb-4">
-            <AlertCircle className="w-10 h-10" />
+        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-6 bg-slate-950/90 backdrop-blur-md text-center text-white">
+          <div className="p-3.5 rounded-full bg-red-900/40 border border-red-500/30 text-red-400 mb-3">
+            <AlertCircle className="w-8 h-8" />
           </div>
-          <h3 className="text-base font-bold text-white mb-2">Model 3D Belum Tersedia</h3>
-          <p className="text-xs text-slate-300 max-w-xs leading-relaxed mb-5">
+          <h3 className="text-sm font-bold text-white mb-1.5">Model 3D Belum Tersedia</h3>
+          <p className="text-xs text-slate-300 max-w-xs leading-relaxed mb-4">
             {errorMessage || 'Aset 3D untuk satwa ini sedang disiapkan oleh tim Assets. Model alternatif atau placeholder dapat digunakan.'}
           </p>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => {
-                if (viewerRef.current) {
-                  viewerRef.current.src = src;
-                }
-              }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition active:scale-95"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              Coba Muat Ulang
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              if (viewerRef.current) {
+                viewerRef.current.src = src;
+              }
+            }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition active:scale-95"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Coba Muat Ulang
+          </button>
         </div>
       )}
     </div>
