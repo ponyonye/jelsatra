@@ -10,6 +10,9 @@ interface ModelViewerProps {
   autoRotate?: boolean;
   cameraControls?: boolean;
   ar?: boolean;
+  arModes?: string;
+  arPlacement?: 'floor' | 'wall';
+  arScale?: 'auto' | 'fixed';
   showArButton?: boolean;
   showCapabilityBadge?: boolean;
   orientation?: string;
@@ -33,6 +36,9 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
   autoRotate = false,
   cameraControls = true,
   ar = true,
+  arModes = 'webxr scene-viewer quick-look',
+  arPlacement = 'floor',
+  arScale = 'auto',
   showArButton = true,
   showCapabilityBadge = false,
   orientation,
@@ -55,6 +61,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isArSupported, setIsArSupported] = useState<boolean>(false);
+  const [arStatus, setArStatus] = useState<string>('not-presenting');
 
   // Store latest callbacks in a ref to avoid re-subscribing useEffect when callbacks change identity
   const callbacksRef = useRef({ onLoad, onError, onProgress, onArStatusChange });
@@ -103,7 +110,8 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
     };
 
     const handleArStatus = (event: any) => {
-      const status = event.detail?.status;
+      const status = event.detail?.status || 'not-presenting';
+      setArStatus(status);
       callbacksRef.current.onArStatusChange?.(status);
       if (status === 'failed') {
         setIsArSupported(false);
@@ -152,8 +160,9 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
         loading="lazy"
         reveal="auto"
         ar={ar}
-        ar-modes="webxr scene-viewer quick-look"
-        ar-scale="auto"
+        ar-modes={arModes}
+        ar-placement={arPlacement}
+        ar-scale={arScale}
         camera-controls={cameraControls}
         auto-rotate={autoRotate}
         orientation={orientation}
@@ -192,6 +201,23 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
             </div>
           )}
         </div>
+
+        {/* WebXR In-AR Educational HUD DOM Overlay */}
+        {(arStatus === 'session-started' || arStatus === 'object-placed') && (
+          <div className="absolute top-4 inset-x-4 z-40 pointer-events-none flex flex-col items-center">
+            <div className="bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-700/80 shadow-2xl text-center text-white pointer-events-auto max-w-xs animate-in fade-in duration-200">
+              <div className="flex items-center justify-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-xs font-bold text-white">{alt}</span>
+              </div>
+              <p className="text-[11px] text-slate-300 mt-1 leading-snug">
+                {arStatus === 'object-placed'
+                  ? 'Satwa berhasil ditempatkan! Anda dapat menggeser untuk memindahkan, memutar, atau mencubit untuk zoom.'
+                  : 'Arahkan kamera ke permukaan lantai atau meja datar hingga satwa muncul...'}
+              </p>
+            </div>
+          </div>
+        )}
       </model-viewer>
 
       {/* Optional AR Capability Indicator Badge */}

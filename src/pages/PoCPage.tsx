@@ -89,6 +89,8 @@ export const PoCPage: React.FC = () => {
           autoRotate={false}
           cameraControls={true}
           ar={true}
+          arPlacement="floor"
+          arScale="auto"
           className="w-full h-full"
         />
       </main>

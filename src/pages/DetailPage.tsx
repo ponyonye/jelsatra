@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Utensils, Sparkles, Box, Info, RotateCcw, Volume2, Move, ZoomIn, Loader2 } from 'lucide-react';
+import { ChevronLeft, MapPin, Utensils, Sparkles, Box, Info, RotateCcw, Volume2, Move, ZoomIn, Loader2 } from 'lucide-react';
 import animalsData from '@/data/animals.json';
 import { Animal } from '@/types/animal';
 import { ConservationBadge } from '@/components/common/ConservationBadge';
@@ -17,6 +17,18 @@ export const DetailPage: React.FC = () => {
   const [isModelReady, setIsModelReady] = useState<boolean>(false);
   const [loadPercent, setLoadPercent] = useState<number>(0);
   const [is3DFallbackOpen, setIs3DFallbackOpen] = useState<boolean>(false);
+  const [arNoticeMessage, setArNoticeMessage] = useState<string>('');
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   if (!animal) {
     return (
@@ -27,7 +39,7 @@ export const DetailPage: React.FC = () => {
         </p>
         <button
           onClick={() => navigate('/')}
-          className="px-4 py-2 rounded-xl bg-emerald-700 text-white text-xs font-semibold shadow"
+          className="px-4 py-2 rounded-xl bg-emerald-700 text-white text-xs font-semibold shadow active:scale-95 transition"
         >
           Kembali ke Galeri
         </button>
@@ -41,7 +53,7 @@ export const DetailPage: React.FC = () => {
    * Launch AR directly from user interaction to preserve transient user activation.
    * If AR is supported and camera is available, WebXR / Scene Viewer / Quick Look starts directly.
    * If AR is unavailable, permission is denied, camera is busy, or device is desktop,
-   * transitions to the 3D Fallback Mode with the dark blue background.
+   * transitions to the 3D Fallback Mode matching Mockup 8.
    */
   const handleStartAR = () => {
     const viewer = viewerRef.current;
@@ -53,15 +65,18 @@ export const DetailPage: React.FC = () => {
         if (arPromise && typeof arPromise.catch === 'function') {
           arPromise.catch((err: any) => {
             console.warn('AR activation promise rejected:', err);
+            setArNoticeMessage('Kamera AR tidak dapat diakses atau izin kamera ditolak. Menampilkan Tampilan 3D Interaktif.');
             setIs3DFallbackOpen(true);
           });
         }
       } catch (err) {
         console.warn('AR activation threw synchronously:', err);
+        setArNoticeMessage('Mode AR tidak dapat diluncurkan pada peramban ini. Menampilkan Tampilan 3D Interaktif.');
         setIs3DFallbackOpen(true);
       }
     } else {
       // Device/browser does not support AR -> activate Fallback 3D Mode
+      setArNoticeMessage('Perangkat atau peramban tidak mendukung WebXR / AR. Menampilkan Tampilan 3D Interaktif.');
       setIs3DFallbackOpen(true);
     }
   };
@@ -82,59 +97,86 @@ export const DetailPage: React.FC = () => {
   };
 
   const handlePlaySound = () => {
-    alert(`Suara satwa ${animal.commonName} akan diputar saat berkas audio dari tim Assets siap.`);
+    if (animal.audioUrl) {
+      if (isPlayingAudio && audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        setIsPlayingAudio(false);
+        return;
+      }
+
+      if (!audioRef.current) {
+        audioRef.current = new Audio(animal.audioUrl);
+        audioRef.current.onended = () => setIsPlayingAudio(false);
+        audioRef.current.onerror = () => {
+          setIsPlayingAudio(false);
+          setArNoticeMessage(`Berkas audio suara ${animal.commonName} belum dapat dimuat.`);
+        };
+      }
+
+      audioRef.current
+        .play()
+        .then(() => setIsPlayingAudio(true))
+        .catch((err) => {
+          console.warn('Audio playback error:', err);
+          setIsPlayingAudio(false);
+        });
+    } else {
+      setArNoticeMessage(`Berkas audio suara ${animal.commonName} sedang disiapkan oleh tim Assets.`);
+    }
   };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
-      {/* Top Header matching Mockup 2-7 */}
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100 safe-top px-4 py-3 shadow-xs">
+      {/* Top Header matching Figma Mockup 2-7 */}
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-100 safe-top px-4 py-3 shadow-xs">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <button
             onClick={() => navigate('/')}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 shadow-xs active:scale-95 transition"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 shadow-xs active:scale-95 transition"
+            aria-label="Kembali ke Galeri"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ChevronLeft className="w-4 h-4 text-slate-600" />
             <span>Kembali</span>
           </button>
 
-          <h1 className="text-sm font-extrabold tracking-wide text-slate-900 uppercase">
+          <h1 className="text-sm font-extrabold tracking-wider text-slate-900 uppercase">
             DETAIL SATWA
           </h1>
-
-          <div className="w-14" />
         </div>
       </header>
 
       {/* Main Detail Content */}
       <main className="flex-1 max-w-md mx-auto w-full px-4 py-4 pb-28">
         {/*
-          Hero Banner Slot:
-          Maintains the aspect-[16/9] space in the detail page flow.
-          When is3DFallbackOpen is true, the inner container smoothly takes over the full viewport
+          Hero Visual Slot:
+          Maintains the aspect-[16/10] space in the detail page flow.
+          Renders 3D Model Viewer with heroImage as seamless poster.
+          When is3DFallbackOpen is true, smoothly takes over the full viewport
           displaying the dark blue fallback mode matching Mockup 8.
         */}
-        <div className="relative aspect-[16/9] w-full rounded-2xl bg-slate-100 mb-4">
+        <div className="relative aspect-[16/10] w-full rounded-2xl bg-slate-100 mb-4 shadow-sm">
           <div
             className={
               is3DFallbackOpen
                 ? "fixed inset-0 z-50 bg-slate-900 text-white flex flex-col justify-between overflow-hidden select-none"
-                : "relative w-full h-full rounded-2xl overflow-hidden shadow-sm bg-slate-900 border border-slate-200/80"
+                : "relative w-full h-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80"
             }
           >
-            {/* Header when in Fallback 3D Mode */}
+            {/* Header when in Fallback 3D Mode matching Mockup 8 */}
             {is3DFallbackOpen && (
               <header className="relative z-20 flex items-center justify-between px-4 py-3 safe-top bg-slate-950/80 backdrop-blur border-b border-slate-800">
                 <button
                   onClick={() => setIs3DFallbackOpen(false)}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 shadow-md active:scale-95 transition"
+                  aria-label="Tutup Tampilan 3D"
                 >
-                  <ArrowLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-4 h-4" />
                   <span>Kembali</span>
                 </button>
 
                 <h2 className="text-xs font-bold tracking-wider uppercase text-slate-200">
-                  SATWA (3D FALLBACK)
+                  SATWA (AR)
                 </h2>
 
                 <div className="w-16" />
@@ -142,21 +184,28 @@ export const DetailPage: React.FC = () => {
             )}
 
             {/* Notice Banner when in Fallback 3D Mode */}
-            {is3DFallbackOpen && (
+            {is3DFallbackOpen && arNoticeMessage && (
               <div className="relative z-20 mx-4 mt-2">
-                <div className="p-2.5 rounded-2xl bg-amber-950/80 border border-amber-500/40 text-amber-200 text-xs flex items-start gap-2.5 shadow-lg">
-                  <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <p className="leading-relaxed text-[11px]">
-                    Mode 3D Aktif: Kamera AR tidak tersedia atau tidak didukung pada perangkat/peramban ini. Anda tetap dapat memutar dan melihat model 3D di bawah ini.
-                  </p>
+                <div className="p-2.5 rounded-2xl bg-amber-950/80 border border-amber-500/40 text-amber-200 text-xs flex items-center justify-between gap-2.5 shadow-lg">
+                  <div className="flex items-center gap-2">
+                    <Info className="w-4 h-4 text-amber-400 shrink-0" />
+                    <p className="leading-snug text-[11px]">{arNoticeMessage}</p>
+                  </div>
+                  <button
+                    onClick={() => setArNoticeMessage('')}
+                    className="text-amber-300 hover:text-white text-xs px-1.5 py-0.5 rounded cursor-pointer"
+                    aria-label="Tutup pemberitahuan"
+                  >
+                    ✕
+                  </button>
                 </div>
               </div>
             )}
 
             {/* Gesture Hints Pill in Fallback Mode matching Mockup 8 */}
             {is3DFallbackOpen && (
-              <div className="relative z-20 mx-auto px-4 w-full max-w-sm mt-2">
-                <div className="flex items-center justify-center gap-4 py-1.5 px-4 rounded-full bg-slate-950/80 backdrop-blur border border-slate-800 text-xs text-slate-300 shadow-md">
+              <div className="relative z-20 mx-auto px-4 w-full max-w-sm mt-3">
+                <div className="flex items-center justify-center gap-4 py-2 px-4 rounded-full bg-slate-950/85 backdrop-blur border border-slate-800 text-xs text-slate-300 shadow-lg">
                   <div className="flex items-center gap-1.5">
                     <Move className="w-3.5 h-3.5 text-emerald-400" />
                     <span className="text-[11px]">Geser satu jari untuk memutar</span>
@@ -164,7 +213,7 @@ export const DetailPage: React.FC = () => {
                   <span className="text-slate-600">•</span>
                   <div className="flex items-center gap-1.5">
                     <ZoomIn className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-[11px]">Cubit untuk zoom</span>
+                    <span className="text-[11px]">Cubit untuk memperbesar</span>
                   </div>
                 </div>
               </div>
@@ -173,7 +222,7 @@ export const DetailPage: React.FC = () => {
             {/* Decorative dashed circle reticle in background matching Mockup 8 */}
             {is3DFallbackOpen && (
               <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
-                <div className="w-72 h-72 rounded-full border border-dashed border-slate-600/60 flex items-center justify-center">
+                <div className="w-72 h-72 rounded-full border-2 border-dashed border-slate-600/60 flex items-center justify-center">
                   <div className="w-48 h-48 rounded-full border border-slate-700/40" />
                 </div>
               </div>
@@ -190,6 +239,8 @@ export const DetailPage: React.FC = () => {
                 autoRotate={false}
                 cameraControls={true}
                 ar={true}
+                arPlacement="floor"
+                arScale="auto"
                 showArButton={false}
                 orientation={animal.modelOrientation}
                 cameraOrbit={animal.initialCameraOrbit}
@@ -197,6 +248,7 @@ export const DetailPage: React.FC = () => {
                 onProgress={(p) => setLoadPercent(p)}
                 onArStatusChange={(status) => {
                   if (status === 'failed') {
+                    setArNoticeMessage('Sesi AR gagal dimulai atau terhenti. Menampilkan Tampilan 3D Interaktif.');
                     setIs3DFallbackOpen(true);
                   }
                 }}
@@ -204,23 +256,13 @@ export const DetailPage: React.FC = () => {
               />
             </div>
 
-            {/* Badge overlay in normal detail mode */}
-            {!is3DFallbackOpen && (
-              <div className="absolute top-2.5 right-2.5 pointer-events-none z-10">
-                <span className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur text-[10px] font-bold text-white flex items-center gap-1">
-                  <span>360</span>
-                  <span>3D AR</span>
-                </span>
-              </div>
-            )}
-
             {/* Bottom Controls when in Fallback Mode matching Mockup 8 */}
             {is3DFallbackOpen && (
               <footer className="relative z-20 px-4 pb-4 safe-bottom flex flex-col gap-3 max-w-md mx-auto w-full">
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={handleResetCamera}
-                    className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-100 text-xs font-semibold shadow-md active:scale-95 transition"
+                    className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-100 text-xs font-semibold shadow-md active:scale-95 transition cursor-pointer"
                   >
                     <RotateCcw className="w-4 h-4 text-slate-300" />
                     <span>Reset Posisi</span>
@@ -228,10 +270,15 @@ export const DetailPage: React.FC = () => {
 
                   <button
                     onClick={handlePlaySound}
-                    className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md active:scale-95 transition"
+                    className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold shadow-md active:scale-95 transition cursor-pointer ${
+                      isPlayingAudio
+                        ? 'bg-amber-600 text-white animate-pulse'
+                        : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+                    }`}
+                    aria-label={isPlayingAudio ? 'Hentikan Suara Satwa' : 'Putar Suara Satwa'}
                   >
-                    <Volume2 className="w-4 h-4 text-slate-950" />
-                    <span>Suara Satwa</span>
+                    <Volume2 className="w-4 h-4" />
+                    <span>{isPlayingAudio ? 'Hentikan Suara' : 'Suara Satwa'}</span>
                   </button>
                 </div>
 
@@ -248,50 +295,53 @@ export const DetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Status Pills matching Mockup 2-7 */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-emerald-800 text-white shadow-xs">
+        {/* Status Badges matching Figma Mockup 2-7 */}
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <span className="px-3.5 py-1 rounded-full text-xs font-semibold bg-[#1c6442] text-white shadow-xs">
             {animal.protectionStatus}
           </span>
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-red-600 text-white shadow-xs">
+          <span className="px-3.5 py-1 rounded-full text-xs font-semibold bg-[#dc2626] text-white shadow-xs">
             Prioritas konservasi nasional
           </span>
-          <ConservationBadge status={animal.conservationStatus} showFullLabel={true} />
+          {animal.conservationStatus && (
+            <ConservationBadge status={animal.conservationStatus} showFullLabel={true} />
+          )}
         </div>
 
-        {/* Animal Titles */}
-        <div className="mt-3 text-center">
-          <h2 className="text-xl font-extrabold tracking-tight text-slate-900">
+        {/* Animal Names */}
+        <div className="mt-2.5 text-center">
+          <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">
             {animal.commonName}
           </h2>
-          <p className="text-sm italic text-slate-500 font-medium">
+          <p className="text-sm italic text-slate-500 font-normal mt-0.5">
             {animal.scientificName}
           </p>
         </div>
 
-        {/* Info Cards matching Mockup 2-7 */}
-        <div className="mt-5 space-y-3">
-          {/* Card 1: Habitat & Persebaran */}
-          <section className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-start gap-3.5">
-            <div className="p-2.5 rounded-xl bg-amber-50 text-amber-700 shrink-0">
+        {/* Info Cards matching Figma Mockups 2-7 */}
+        <div className="mt-4 space-y-3">
+          {/* Card 1: Habitat & Wilayah Persebaran */}
+          <section className="bg-white rounded-2xl p-4 border border-slate-100 shadow-xs flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-100/90 flex items-center justify-center text-amber-700 shrink-0">
               <MapPin className="w-5 h-5" />
             </div>
-            <div>
+            <div className="flex-1">
               <h3 className="text-sm font-bold text-slate-900">
                 Habitat dan wilayah persebaran
               </h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                {animal.habitat}. Satwa ini tersebar di: {animal.distribution}.
+                {animal.habitatDistributionText ||
+                  `${animal.commonName} hidup di ${animal.habitat.toLowerCase()}. Satwa ini dapat ditemukan secara alami di ${animal.distribution}.`}
               </p>
             </div>
           </section>
 
           {/* Card 2: Makanan */}
-          <section className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-start gap-3.5">
-            <div className="p-2.5 rounded-xl bg-amber-50 text-amber-700 shrink-0">
+          <section className="bg-white rounded-2xl p-4 border border-slate-100 shadow-xs flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-100/90 flex items-center justify-center text-amber-700 shrink-0">
               <Utensils className="w-5 h-5" />
             </div>
-            <div>
+            <div className="flex-1">
               <h3 className="text-sm font-bold text-slate-900">
                 Makanan
               </h3>
@@ -302,35 +352,34 @@ export const DetailPage: React.FC = () => {
           </section>
 
           {/* Card 3: Fakta Unik */}
-          <section className="bg-white rounded-2xl p-4 border border-amber-100 bg-amber-50/20 shadow-sm flex items-start gap-3.5">
-            <div className="p-2.5 rounded-xl bg-amber-100 text-amber-700 shrink-0">
+          <section className="bg-amber-50/30 rounded-2xl p-4 border border-amber-200/60 shadow-xs flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
               <Sparkles className="w-5 h-5" />
             </div>
-            <div>
+            <div className="flex-1">
               <h3 className="text-sm font-bold text-slate-900">
                 Fakta unik
               </h3>
-              <ul className="text-xs text-slate-600 mt-1 space-y-1.5 leading-relaxed list-disc list-inside">
-                {animal.funFacts.map((fact, idx) => (
-                  <li key={idx}>{fact}</li>
-                ))}
-              </ul>
+              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                {animal.funFactNarrative || animal.funFacts.join(' ')}
+              </p>
             </div>
           </section>
         </div>
       </main>
 
-      {/* Fixed Bottom Action Bar: Directly launches AR without intermediate screen on compatible devices */}
+      {/* Fixed Bottom Action Bar: Directly launches AR on compatible devices */}
       <aside className="fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-100 p-4 safe-bottom">
         <div className="max-w-md mx-auto">
           <button
             onClick={handleStartAR}
             disabled={!isModelReady && loadPercent < 100 && !viewerRef.current?.loaded}
-            className={`w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-2xl font-bold text-sm shadow-lg transition active:scale-[0.98] ${
+            className={`w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-2xl font-bold text-sm shadow-lg transition active:scale-[0.98] cursor-pointer ${
               !isModelReady && loadPercent < 100 && !viewerRef.current?.loaded
                 ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none'
-                : 'bg-emerald-800 hover:bg-emerald-700 text-white shadow-emerald-900/20'
+                : 'bg-[#1c6442] hover:bg-emerald-700 text-white shadow-emerald-950/15'
             }`}
+            aria-label="Lihat dalam AR (3D)"
           >
             {!isModelReady && loadPercent < 100 && !viewerRef.current?.loaded ? (
               <>
@@ -339,7 +388,7 @@ export const DetailPage: React.FC = () => {
               </>
             ) : (
               <>
-                <Box className="w-5 h-5" />
+                <Box className="w-5 h-5 text-emerald-200" />
                 <span>Lihat dalam AR (3D)</span>
               </>
             )}

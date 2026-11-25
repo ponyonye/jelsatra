@@ -5,11 +5,20 @@ export interface FunFact {
   text: string;
 }
 
+export interface LicenseInfo {
+  status: 'active' | 'undecided' | 'pending_approval' | 'decided';
+  name: string | null;
+  copyright?: string;
+  note?: string;
+  documentUrl?: string;
+}
+
 export interface ModelCredits {
   creator: string;
   title: string;
+  software?: string;
   source: string;
-  license: string;
+  license: string | LicenseInfo;
   url?: string;
 }
 
@@ -26,8 +35,10 @@ export interface Animal {
   initialCameraOrbit?: string;
   habitat: string;
   distribution: string;
+  habitatDistributionText?: string;
   diet: string;
   funFacts: string[];
+  funFactNarrative?: string;
   conservationStatus: ConservationStatusCode;
   conservationLabel: string;
   protectionStatus: string;
@@ -48,6 +59,17 @@ export interface DataSource {
   url?: string;
 }
 
+export interface Model3DCredit {
+  animalName: string;
+  slug: string;
+  title: string;
+  creator: string;
+  software: string;
+  source: string;
+  assetPath: string;
+  license: LicenseInfo;
+}
+
 export interface AssetCredit {
   item: string;
   creator: string;
@@ -58,6 +80,7 @@ export interface AssetCredit {
 export interface CreditsData {
   team: TeamMember[];
   dataSources: DataSource[];
+  models3d: Model3DCredit[];
   assetCredits: AssetCredit[];
 }
 

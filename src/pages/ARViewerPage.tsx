@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Move, ZoomIn, RotateCcw, Volume2, Sparkles, Info } from 'lucide-react';
 import animalsData from '@/data/animals.json';
@@ -10,6 +10,18 @@ export const ARViewerPage: React.FC = () => {
   const navigate = useNavigate();
   const viewerRef = useRef<any>(null);
   const [isArSupported, setIsArSupported] = useState<boolean>(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
+  const [audioNotice, setAudioNotice] = useState<string>('');
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   const animals: Animal[] = animalsData as Animal[];
   const animal = animals.find((a) => a.slug === slug);
@@ -42,7 +54,33 @@ export const ARViewerPage: React.FC = () => {
   };
 
   const handlePlaySound = () => {
-    alert(`Suara satwa ${animal?.commonName || 'ini'} akan diputar saat berkas audio dari tim Assets siap.`);
+    if (animal?.audioUrl) {
+      if (isPlayingAudio && audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        setIsPlayingAudio(false);
+        return;
+      }
+
+      if (!audioRef.current) {
+        audioRef.current = new Audio(animal.audioUrl);
+        audioRef.current.onended = () => setIsPlayingAudio(false);
+        audioRef.current.onerror = () => {
+          setIsPlayingAudio(false);
+          setAudioNotice(`Berkas audio suara ${animal.commonName} belum dapat dimuat.`);
+        };
+      }
+
+      audioRef.current
+        .play()
+        .then(() => setIsPlayingAudio(true))
+        .catch((err) => {
+          console.warn('Audio playback error:', err);
+          setIsPlayingAudio(false);
+        });
+    } else {
+      setAudioNotice(`Berkas audio suara ${animal?.commonName || 'satwa ini'} sedang disiapkan oleh tim Assets.`);
+    }
   };
 
   if (!animal) {
@@ -94,6 +132,24 @@ export const ARViewerPage: React.FC = () => {
         </div>
       )}
 
+      {/* Audio notice banner if audio is requested */}
+      {audioNotice && (
+        <div className="relative z-20 mx-4 mt-1">
+          <div className="p-2.5 rounded-xl bg-amber-950/80 border border-amber-600/50 text-amber-200 text-xs flex items-center justify-between gap-2 shadow-lg">
+            <div className="flex items-center gap-2">
+              <Info className="w-4 h-4 shrink-0 text-amber-400" />
+              <span>{audioNotice}</span>
+            </div>
+            <button
+              onClick={() => setAudioNotice('')}
+              className="text-amber-300 hover:text-white text-xs px-1.5 py-0.5 rounded cursor-pointer"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Gesture Hint Banner */}
       <div className="relative z-20 mx-auto px-4 w-full max-w-sm mt-1">
         <div className="flex items-center justify-center gap-4 py-2 px-4 rounded-full bg-slate-950/80 backdrop-blur border border-slate-800 text-xs text-slate-300 shadow-lg">
@@ -120,6 +176,8 @@ export const ARViewerPage: React.FC = () => {
           autoRotate={false}
           cameraControls={true}
           ar={true}
+          arPlacement="floor"
+          arScale="auto"
           showArButton={false}
           orientation={animal.modelOrientation}
           cameraOrbit={animal.initialCameraOrbit}
@@ -146,10 +204,15 @@ export const ARViewerPage: React.FC = () => {
 
           <button
             onClick={handlePlaySound}
-            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md active:scale-95 transition"
+            className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold shadow-md active:scale-95 transition cursor-pointer ${
+              isPlayingAudio
+                ? 'bg-amber-600 text-white animate-pulse'
+                : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+            }`}
+            aria-label={isPlayingAudio ? 'Hentikan Suara Satwa' : 'Putar Suara Satwa'}
           >
-            <Volume2 className="w-4 h-4 text-slate-950" />
-            <span>Suara Satwa</span>
+            <Volume2 className="w-4 h-4" />
+            <span>{isPlayingAudio ? 'Hentikan Suara' : 'Suara Satwa'}</span>
           </button>
         </div>
 

@@ -25,13 +25,16 @@
       "Balai Taman Nasional Komodo"
     ],
     "modelCredits": {
-      "creator": "Assets Team (Guna) / CC-BY 3D Source",
-      "title": "Komodo Dragon Low-Poly 3D Model",
-      "source": "Sketchfab / Open 3D Repository",
-      "license": "CC-BY 4.0"
+      "creator": "Guna",
+      "software": "Blender",
+      "title": "Model 3D Komodo",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "license": "All Rights Reserved"
     },
     "modelOrientation": "0deg 0deg 180deg",
-    "initialCameraOrbit": "0deg 75deg 105%"
+    "initialCameraOrbit": "0deg 75deg 105%",
+    "habitatDistributionText": "Komodo hidup di sabana, padang rumput, dan hutan tropis kering. Satwa ini dapat ditemukan secara alami di Pulau Komodo, Rinca, Gili Motang, Gili Dasami, dan sebagian wilayah Flores, Nusa Tenggara Timur.",
+    "funFactNarrative": "Komodo merupakan kadal terbesar yang masih hidup di dunia. Hewan ini memiliki lidah bercabang untuk mendeteksi bau dan mampu berkembang biak tanpa pejantan melalui proses yang disebut partenogenesis."
   },
   {
     "id": "orangutan-kalimantan",
@@ -59,13 +62,16 @@
       "BKSDA Kalimantan Barat"
     ],
     "modelCredits": {
-      "creator": "Assets Team (Guna) / CC-BY 3D Source",
-      "title": "Bornean Orangutan 3D Model",
-      "source": "Sketchfab / Open 3D Repository",
-      "license": "CC-BY 4.0"
+      "creator": "Guna",
+      "software": "Blender",
+      "title": "Model 3D Orangutan Kalimantan",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "license": "All Rights Reserved"
     },
     "modelOrientation": "0deg 0deg 180deg",
-    "initialCameraOrbit": "0deg 75deg 105%"
+    "initialCameraOrbit": "0deg 75deg 105%",
+    "habitatDistributionText": "Orangutan Kalimantan hidup di hutan hujan tropis, hutan rawa gambut, dan hutan dataran rendah. Persebaran alaminya berada di Pulau Kalimantan, meliputi Kalimantan Indonesia serta Sabah dan Sarawak di Malaysia.",
+    "funFactNarrative": "Orangutan lebih banyak menghabiskan waktunya di atas pohon dan membuat sarang dari ranting serta daun untuk tidur. Selain itu, orangutan berperan penting dalam penyebaran biji tumbuhan melalui buah-buahan yang dimakannya."
   },
   {
     "id": "harimau-sumatra",
@@ -93,13 +99,16 @@
       "Forum Konservasi HarimauKita"
     ],
     "modelCredits": {
-      "creator": "Assets Team (Guna) / CC-BY 3D Source",
-      "title": "Sumatran Tiger 3D Model",
-      "source": "Sketchfab / Open 3D Repository",
-      "license": "CC-BY 4.0"
+      "creator": "Guna",
+      "software": "Blender",
+      "title": "Model 3D Harimau Sumatra",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "license": "All Rights Reserved"
     },
     "modelOrientation": "0deg 0deg 180deg",
-    "initialCameraOrbit": "0deg 75deg 105%"
+    "initialCameraOrbit": "0deg 75deg 105%",
+    "habitatDistributionText": "Harimau Sumatra hidup di hutan hujan tropis, hutan dataran rendah, hutan rawa gambut, dan hutan pegunungan. Persebaran alaminya hanya terdapat di Pulau Sumatra, Indonesia.",
+    "funFactNarrative": "Harimau Sumatra merupakan satu-satunya subspesies harimau yang masih hidup secara alami di Indonesia. Ukuran tubuhnya relatif lebih kecil dibandingkan subspesies harimau lainnya dan memiliki pola loreng yang unik pada setiap individu."
   },
   {
     "id": "badak-jawa",
@@ -127,13 +136,16 @@
       "Yayasan Badak Indonesia (YABI)"
     ],
     "modelCredits": {
-      "creator": "Assets Team (Guna) / CC-BY 3D Source",
-      "title": "Javan Rhinoceros 3D Model",
-      "source": "Sketchfab / Open 3D Repository",
-      "license": "CC-BY 4.0"
+      "creator": "Guna",
+      "software": "Blender",
+      "title": "Model 3D Badak Jawa",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "license": "All Rights Reserved"
     },
     "modelOrientation": "0deg 0deg 180deg",
-    "initialCameraOrbit": "0deg 75deg 105%"
+    "initialCameraOrbit": "0deg 75deg 105%",
+    "habitatDistributionText": "Badak Jawa hidup di hutan hujan tropis dataran rendah, terutama hutan lebat yang memiliki sumber air dan tumbuhan pakan. Saat ini, populasi alaminya hanya ditemukan di Taman Nasional Ujung Kulon, Banten, Indonesia.",
+    "funFactNarrative": "Badak Jawa memiliki satu cula, berbeda dengan Badak Sumatra yang memiliki dua cula. Satwa ini termasuk salah satu spesies badak paling langka di dunia dan sering berkubang di lumpur untuk menjaga suhu tubuh serta melindungi kulitnya."
   },
   {
     "id": "jalak-bali",
@@ -161,13 +173,16 @@
       "KLHK Direktorat Jenderal KSDAE"
     ],
     "modelCredits": {
-      "creator": "Assets Team (Guna) / CC-BY 3D Source",
-      "title": "Bali Myna 3D Model",
-      "source": "Sketchfab / Open 3D Repository",
-      "license": "CC-BY 4.0"
+      "creator": "Guna",
+      "software": "Blender",
+      "title": "Model 3D Jalak Bali (Curik Bali)",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "license": "All Rights Reserved"
     },
     "modelOrientation": "0deg 0deg 180deg",
-    "initialCameraOrbit": "0deg 75deg 105%"
+    "initialCameraOrbit": "0deg 75deg 105%",
+    "habitatDistributionText": "Jalak Bali hidup di hutan musim, hutan pantai, hutan mangrove, dan sabana. Satwa endemik Indonesia ini berasal dari bagian barat Pulau Bali, terutama kawasan Taman Nasional Bali Barat.",
+    "funFactNarrative": "Jalak Bali memiliki hampir seluruh tubuh yang ditutupi bulu berwarna putih dengan kulit di sekitar mata berwarna biru tua. Burung ini merupakan satwa endemik Indonesia yang secara alami hanya ditemukan di Pulau Bali."
   },
   {
     "id": "anoa-dataran-rendah",
@@ -195,12 +210,15 @@
       "Direktorat Jenderal KSDAE KLHK"
     ],
     "modelCredits": {
-      "creator": "Assets Team (Guna) / CC-BY 3D Source",
-      "title": "Lowland Anoa 3D Model",
-      "source": "Sketchfab / Open 3D Repository",
-      "license": "CC-BY 4.0"
+      "creator": "Guna",
+      "software": "Blender",
+      "title": "Model 3D Anoa Dataran Rendah",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "license": "All Rights Reserved"
     },
     "modelOrientation": "0deg 0deg 180deg",
-    "initialCameraOrbit": "0deg 75deg 105%"
+    "initialCameraOrbit": "0deg 75deg 105%",
+    "habitatDistributionText": "Anoa dataran rendah hidup di hutan primer dataran rendah, hutan tropis, dan kawasan hutan yang memiliki sumber air. Persebaran alaminya berada di Pulau Sulawesi, Indonesia.",
+    "funFactNarrative": "Anoa merupakan salah satu jenis kerbau liar berukuran kecil. Anoa dataran rendah biasanya hidup menyendiri. Hewan ini juga sering berkubang atau mandi di genangan air dan lumpur."
   }
 ]

@@ -2,15 +2,15 @@
   "team": [
     {
       "name": "Raihan Garuts",
-      "role": "Ketua / Product Manager"
+      "role": "Ketua/Product Manager"
     },
     {
       "name": "Raihan Bekasi",
-      "role": "Programmer / Software Engineer"
+      "role": "Programmer"
     },
     {
       "name": "Guna",
-      "role": "3D Modeler & Content Assets"
+      "role": "3D Modeler"
     },
     {
       "name": "Novali",
@@ -47,13 +47,105 @@
       "description": "Katalog global status risiko kepunahan keanekaragaman hayati dunia"
     }
   ],
-  "assetCredits": [
+  "models3d": [
     {
-      "item": "Model 3D Format GLB/glTF",
-      "creator": "Guna (Assets) & Open Creative Commons Creators",
-      "source": "Sketchfab / Poly Pizza (CC-BY 4.0 / CC0)",
-      "license": "Creative Commons Attribution"
+      "animalName": "Komodo",
+      "slug": "komodo",
+      "title": "Model 3D Komodo",
+      "creator": "Guna",
+      "software": "Blender",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "assetPath": "/models/komodo.glb",
+      "license": {
+        "status": "active",
+        "name": "All Rights Reserved",
+        "copyright": "© 2026 Guna. All Rights Reserved.",
+        "note": "Aset orisinal dilisensikan khusus untuk proyek Jelajah Satwa Nusantara.",
+        "documentUrl": "/models/MODEL-LICENSE.md"
+      }
     },
+    {
+      "animalName": "Orangutan Kalimantan",
+      "slug": "orangutan-kalimantan",
+      "title": "Model 3D Orangutan Kalimantan",
+      "creator": "Guna",
+      "software": "Blender",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "assetPath": "/models/orangutan_kalimantan.glb",
+      "license": {
+        "status": "active",
+        "name": "All Rights Reserved",
+        "copyright": "© 2026 Guna. All Rights Reserved.",
+        "note": "Aset orisinal dilisensikan khusus untuk proyek Jelajah Satwa Nusantara.",
+        "documentUrl": "/models/MODEL-LICENSE.md"
+      }
+    },
+    {
+      "animalName": "Harimau Sumatra",
+      "slug": "harimau-sumatra",
+      "title": "Model 3D Harimau Sumatra",
+      "creator": "Guna",
+      "software": "Blender",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "assetPath": "/models/harimau_sumatra.glb",
+      "license": {
+        "status": "active",
+        "name": "All Rights Reserved",
+        "copyright": "© 2026 Guna. All Rights Reserved.",
+        "note": "Aset orisinal dilisensikan khusus untuk proyek Jelajah Satwa Nusantara.",
+        "documentUrl": "/models/MODEL-LICENSE.md"
+      }
+    },
+    {
+      "animalName": "Badak Jawa",
+      "slug": "badak-jawa",
+      "title": "Model 3D Badak Jawa",
+      "creator": "Guna",
+      "software": "Blender",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "assetPath": "/models/badak_jawa.glb",
+      "license": {
+        "status": "active",
+        "name": "All Rights Reserved",
+        "copyright": "© 2026 Guna. All Rights Reserved.",
+        "note": "Aset orisinal dilisensikan khusus untuk proyek Jelajah Satwa Nusantara.",
+        "documentUrl": "/models/MODEL-LICENSE.md"
+      }
+    },
+    {
+      "animalName": "Jalak Bali (Curik Bali)",
+      "slug": "jalak-bali",
+      "title": "Model 3D Jalak Bali",
+      "creator": "Guna",
+      "software": "Blender",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "assetPath": "/models/jalak_bali.glb",
+      "license": {
+        "status": "active",
+        "name": "All Rights Reserved",
+        "copyright": "© 2026 Guna. All Rights Reserved.",
+        "note": "Aset orisinal dilisensikan khusus untuk proyek Jelajah Satwa Nusantara.",
+        "documentUrl": "/models/MODEL-LICENSE.md"
+      }
+    },
+    {
+      "animalName": "Anoa Dataran Rendah",
+      "slug": "anoa-dataran-rendah",
+      "title": "Model 3D Anoa Dataran Rendah",
+      "creator": "Guna",
+      "software": "Blender",
+      "source": "Original Asset — Jelajah Satwa Nusantara",
+      "assetPath": "/models/anoa_dataran_rendah.glb",
+      "license": {
+        "status": "active",
+        "name": "All Rights Reserved",
+        "copyright": "© 2026 Guna. All Rights Reserved.",
+        "note": "Aset orisinal dilisensikan khusus untuk proyek Jelajah Satwa Nusantara.",
+        "documentUrl": "/models/MODEL-LICENSE.md"
+      }
+    }
+  ],
+  "assetCredits": [
     {
       "item": "Tipografi Antarmuka (Plus Jakarta Sans)",
       "creator": "Tokotype",
@@ -71,7 +163,18 @@
       "creator": "Google",
       "source": "@google/model-viewer (WebXR, Scene Viewer, Quick Look)",
       "license": "Apache License 2.0"
+    },
+    {
+      "item": "Dokumentasi Foto Satwa",
+      "creator": "Tim Konten / Publikasi Konservasi KLHK & Balai Taman Nasional",
+      "source": "Arsip Edukasi Konservasi Indonesia",
+      "license": "Hak Cipta / Dokumentasi Resmi"
+    },
+    {
+      "item": "Rekaman Audio Suara Satwa",
+      "creator": "Tim Assets (Guna)",
+      "source": "Sedang disiapkan untuk pembaruan rilis mendatang",
+      "license": "Belum ditentukan"
     }
   ]
 }
-
