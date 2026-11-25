@@ -20,6 +20,7 @@ interface ModelViewerProps {
   minCameraOrbit?: string;
   maxCameraOrbit?: string;
   fieldOfView?: string;
+  scale?: string;
   onArStatusChange?: (status: string) => void;
   onLoad?: () => void;
   onError?: (error: string) => void;
@@ -46,6 +47,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
   minCameraOrbit,
   maxCameraOrbit,
   fieldOfView,
+  scale,
   onArStatusChange,
   onLoad,
   onError,
@@ -170,8 +172,9 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
         min-camera-orbit={minCameraOrbit}
         max-camera-orbit={maxCameraOrbit}
         field-of-view={fieldOfView}
-        shadow-intensity="1.2"
-        shadow-softness="0.8"
+        scale={scale}
+        shadow-intensity="1.5"
+        shadow-softness="0.7"
         exposure="1.0"
         touch-action="pan-y"
         style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}

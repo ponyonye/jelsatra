@@ -31,6 +31,7 @@ declare global {
           'max-camera-orbit'?: string;
           'min-field-of-view'?: string;
           'max-field-of-view'?: string;
+          scale?: string;
           'shadow-intensity'?: string | number;
           'shadow-softness'?: string | number;
           exposure?: string | number;
@@ -76,6 +77,7 @@ declare global {
           'max-camera-orbit'?: string;
           'min-field-of-view'?: string;
           'max-field-of-view'?: string;
+          scale?: string;
           'shadow-intensity'?: string | number;
           'shadow-softness'?: string | number;
           exposure?: string | number;
