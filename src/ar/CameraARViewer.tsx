@@ -11,7 +11,8 @@ import {
   AlertCircle,
   Loader2,
   FlipHorizontal,
-  Sparkles
+  Sparkles,
+  Box
 } from 'lucide-react';
 import { Animal } from '@/types/animal';
 import { ConservationBadge } from '@/components/common/ConservationBadge';
@@ -33,9 +34,9 @@ export const CameraARViewer: React.FC<CameraARViewerProps> = ({
   const streamRef = useRef<MediaStream | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Camera stream state
+  // Camera stream state - defaults to inactive Fallback 3D Mode until user explicitly starts webcam
   const [isCameraActive, setIsCameraActive] = useState<boolean>(false);
-  const [isCameraLoading, setIsCameraLoading] = useState<boolean>(true);
+  const [isCameraLoading, setIsCameraLoading] = useState<boolean>(false);
   const [cameraError, setCameraError] = useState<string>('');
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
   const [currentDeviceIndex, setCurrentDeviceIndex] = useState<number>(0);
@@ -238,10 +239,8 @@ export const CameraARViewer: React.FC<CameraARViewerProps> = ({
     }
   }, []);
 
-  // Initialize camera and cleanup on mount / unmount
+  // Setup keyboard shortcuts and cleanup media tracks on unmount
   useEffect(() => {
-    startWebcam();
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
@@ -257,7 +256,7 @@ export const CameraARViewer: React.FC<CameraARViewerProps> = ({
         audioRef.current = null;
       }
     };
-  }, [startWebcam, stopWebcam, onClose]);
+  }, [stopWebcam, onClose]);
 
   const modelSource = animal.modelGlb || '/models/poc-sample.glb';
 
@@ -284,7 +283,7 @@ export const CameraARViewer: React.FC<CameraARViewerProps> = ({
         </div>
       )}
 
-      {/* 3. 3D Floor Placement Reticle & Ground Shadow Target */}
+      {/* 3. 3D Visual Placement Guide Reticle (Visual guide only, not physical plane detection) */}
       {showFloorReticle && (
         <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-10">
           <div
@@ -332,7 +331,7 @@ export const CameraARViewer: React.FC<CameraARViewerProps> = ({
           <span>Kembali</span>
         </button>
 
-        {/* Central AR Status Badge */}
+        {/* Central Status Badge */}
         <div className="flex items-center gap-2">
           {isCameraLoading ? (
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-700 text-slate-300 text-[11px] font-medium backdrop-blur shadow-md">
@@ -342,30 +341,40 @@ export const CameraARViewer: React.FC<CameraARViewerProps> = ({
           ) : isCameraActive ? (
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/90 border border-emerald-500/60 text-emerald-300 text-[11px] font-semibold backdrop-blur shadow-md">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Kamera AR Aktif (Laptop / Desktop)</span>
+              <span>Kamera Overlay (Eksperimental)</span>
             </div>
           ) : (
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-700 text-slate-400 text-[11px] font-medium backdrop-blur shadow-md">
-              <CameraOff className="w-3 h-3 text-amber-400" />
-              <span>Mode Studio 3D (Kamera Mati)</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-700 text-slate-300 text-[11px] font-medium backdrop-blur shadow-md">
+              <Box className="w-3 h-3 text-emerald-400" />
+              <span>Mode 3D Interaktif (Fallback)</span>
             </div>
           )}
         </div>
 
         {/* Right Action Icons: Camera Toggle, Switch Camera, Mirror Toggle */}
         <div className="flex items-center gap-1.5">
-          {/* Toggle Camera On/Off */}
+          {/* Explicit User Toggle: Camera Overlay */}
           <button
             onClick={handleToggleCamera}
-            className={`p-2 rounded-full border text-xs font-semibold shadow-md backdrop-blur active:scale-95 transition cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold shadow-md backdrop-blur active:scale-95 transition cursor-pointer ${
               isCameraActive
                 ? 'bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border-emerald-600/70'
-                : 'bg-slate-800/90 hover:bg-slate-700 text-amber-300 border-slate-700'
+                : 'bg-slate-800/90 hover:bg-slate-700 text-slate-200 border-slate-600'
             }`}
-            title={isCameraActive ? 'Matikan Kamera (Ganti ke Mode Studio)' : 'Aktifkan Kamera Laptop'}
-            aria-label={isCameraActive ? 'Matikan Kamera' : 'Aktifkan Kamera'}
+            title={isCameraActive ? 'Matikan Kamera (Kembali ke Mode 3D Studio)' : 'Aktifkan Kamera Laptop (Mode Overlay Eksperimental)'}
+            aria-label={isCameraActive ? 'Matikan Kamera Laptop' : 'Aktifkan Kamera Laptop'}
           >
-            {isCameraActive ? <Camera className="w-4 h-4" /> : <CameraOff className="w-4 h-4" />}
+            {isCameraActive ? (
+              <>
+                <CameraOff className="w-3.5 h-3.5 text-amber-300" />
+                <span className="hidden sm:inline">Matikan Kamera</span>
+              </>
+            ) : (
+              <>
+                <Camera className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="hidden sm:inline">Kamera Laptop</span>
+              </>
+            )}
           </button>
 
           {/* Switch Camera if multiple cameras detected */}
@@ -490,9 +499,9 @@ export const CameraARViewer: React.FC<CameraARViewerProps> = ({
               ? 'bg-slate-900/90 text-emerald-300 border-emerald-600/50'
               : 'bg-slate-950/80 text-slate-400 border-slate-800'
           }`}
-          title="Tampilkan / Sembunyikan Lingkaran Target Lantai"
+          title="Tampilkan / Sembunyikan Retikel Panduan Posisi Visual (Bukan Deteksi Lantai Fisik)"
         >
-          {showFloorReticle ? 'Target Lantai: On' : 'Target: Off'}
+          {showFloorReticle ? 'Panduan Visual: On' : 'Panduan: Off'}
         </button>
       </div>
 

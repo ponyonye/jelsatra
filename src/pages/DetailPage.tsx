@@ -38,8 +38,33 @@ export const DetailPage: React.FC = () => {
 
   const modelSource = animal.modelGlb || '/models/poc-sample.glb';
 
+  /**
+   * Smart AR Launch:
+   * - On mobile devices supporting Native AR (Android ARCore / Google Scene Viewer & iOS Quick Look),
+   *   directly launches native AR mode within the user gesture.
+   * - On laptops/desktops or devices without native ARCore, launches the in-browser Webcam AR mode.
+   * - If native AR fails or is unavailable on Android, automatically falls back to Webcam AR mode.
+   */
   const handleStartAR = () => {
-    setIsAROpen(true);
+    const viewer = viewerRef.current;
+
+    if (viewer && viewer.canActivateAR) {
+      try {
+        const arPromise = viewer.activateAR();
+        if (arPromise && typeof arPromise.catch === 'function') {
+          arPromise.catch((err: any) => {
+            console.warn('Native AR activation rejected, switching to Webcam AR mode:', err);
+            setIsAROpen(true);
+          });
+        }
+      } catch (err) {
+        console.warn('Native AR threw synchronously, switching to Webcam AR mode:', err);
+        setIsAROpen(true);
+      }
+    } else {
+      // Laptop/desktop or non-ARCore devices: open in-browser Webcam AR mode directly
+      setIsAROpen(true);
+    }
   };
 
   return (
@@ -78,7 +103,10 @@ export const DetailPage: React.FC = () => {
             poster={animal.heroImage}
             autoRotate={false}
             cameraControls={true}
-            ar={false}
+            ar={true}
+            arModes="webxr scene-viewer quick-look"
+            arPlacement="floor"
+            arScale="auto"
             showArButton={false}
             orientation={animal.modelOrientation}
             cameraOrbit={animal.initialCameraOrbit}
